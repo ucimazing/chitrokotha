@@ -156,7 +156,7 @@ function startWordSelection(roomId) {
       });
       nextTurn(roomId);
     }
-  }, 10000);
+  }, 17000);
 }
 
 function startDrawingPhase(roomId, chosenWord) {
