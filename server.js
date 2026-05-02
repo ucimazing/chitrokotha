@@ -348,6 +348,17 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('stop_game', (roomId) => {
+    const room = rooms[roomId];
+    if (room && room.players.length > 0 && room.players[0].id === socket.id && room.isGameActive) {
+      room.isGameActive = false;
+      if (room.timerInterval) clearInterval(room.timerInterval);
+      if (room.chooseTimer) clearTimeout(room.chooseTimer);
+      io.to(roomId).emit('game_over', null);
+      io.to(roomId).emit('chat_message', { sender: 'System', text: 'Game stopped by host.', isSystem: true });
+    }
+  });
+
   socket.on('give_hint', (roomId) => {
     const room = rooms[roomId];
     if (room && room.isGameActive && room.currentWord) {
